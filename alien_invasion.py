@@ -45,7 +45,7 @@ class AlienInvasion:
         """Key pressing events"""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
-        elif event == pygame. K_LEFT:
+        elif event.key == pygame. K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
             sys.exit()
@@ -72,6 +72,13 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+        # Search bullets that have hit aliens and if the have, get rid off alien and bullet
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        if not self.aliens:
+            # Destroy the remaining bullets and create a new fleet
+            self.bullets.empty()
+            self._create_fleet()
 
     def _create_fleet(self):
         """Make the alien fleet"""
